@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { FileUpload } from '@/components/FileUpload';
 import { ResultsTable } from '@/components/ResultsTable';
-import { ProductTitle, processCSV, exportToCSV } from '@/lib/csvUtils';
+import { ProductTitle, processCSV, exportToCSV, processTitle } from '@/lib/csvUtils';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Index = () => {
   const [results, setResults] = useState<ProductTitle[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
+  const [pastedTitles, setPastedTitles] = useState('');
 
   const handleFileSelect = async (file: File) => {
     try {
@@ -24,6 +27,40 @@ const Index = () => {
       toast({
         title: "Error processing file",
         description: "Please ensure your file is a valid CSV with product titles in the first column",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handlePastedTitles = () => {
+    try {
+      setIsProcessing(true);
+      const titles = pastedTitles
+        .split('\n')
+        .map(title => title.trim())
+        .filter(Boolean);
+
+      if (titles.length === 0) {
+        toast({
+          title: "No titles found",
+          description: "Please paste one or more product titles",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const processedData = titles.map(processTitle);
+      setResults(processedData);
+      toast({
+        title: "Titles processed successfully",
+        description: `Analyzed ${processedData.length} product titles`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error processing titles",
+        description: "An error occurred while processing the titles",
         variant: "destructive",
       });
     } finally {
@@ -65,18 +102,42 @@ const Index = () => {
             Product Title Analyzer
           </h1>
           <p className="text-lg text-gray-700 max-w-3xl">
-            Upload a CSV file to analyze product titles for compliance with character count,
+            Upload a CSV file or paste product titles to analyze them for compliance with character count,
             special characters, and word repetition rules.
           </p>
         </div>
 
         <div className="space-y-12">
-          <div>
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-900">Upload File</h2>
-              <FileUpload onFileSelect={handleFileSelect} />
-            </div>
-          </div>
+          <Tabs defaultValue="upload" className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="upload">Upload CSV</TabsTrigger>
+              <TabsTrigger value="paste">Paste Titles</TabsTrigger>
+            </TabsList>
+            <TabsContent value="upload">
+              <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
+                <h2 className="text-2xl font-semibold mb-6 text-gray-900">Upload File</h2>
+                <FileUpload onFileSelect={handleFileSelect} />
+              </div>
+            </TabsContent>
+            <TabsContent value="paste">
+              <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200 space-y-6">
+                <h2 className="text-2xl font-semibold text-gray-900">Paste Titles</h2>
+                <p className="text-gray-600">Enter one product title per line:</p>
+                <Textarea
+                  value={pastedTitles}
+                  onChange={(e) => setPastedTitles(e.target.value)}
+                  placeholder="Enter product titles here..."
+                  className="min-h-[200px]"
+                />
+                <Button 
+                  onClick={handlePastedTitles}
+                  className="bg-[hsl(var(--brand-blue))] hover:bg-[hsl(var(--brand-blue))/90]"
+                >
+                  Analyze Titles
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
 
           {isProcessing && (
             <div className="flex items-center justify-center py-12">
