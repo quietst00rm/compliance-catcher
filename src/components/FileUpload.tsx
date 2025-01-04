@@ -13,7 +13,7 @@ export const FileUpload = ({ onFileSelect }: FileUploadProps) => {
     }
   }, [onFileSelect]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({
     onDrop,
     accept: {
       'text/csv': ['.csv']
@@ -25,29 +25,35 @@ export const FileUpload = ({ onFileSelect }: FileUploadProps) => {
     <div
       {...getRootProps()}
       className={`
-        border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
+        border-2 border-dashed rounded-xl p-12 text-center cursor-pointer
         transition-all duration-200 ease-in-out
         ${isDragActive 
-          ? 'border-primary bg-primary/5 scale-[0.99]' 
-          : 'border-gray-200 hover:border-primary hover:bg-gray-50'
+          ? 'border-[hsl(var(--brand-blue))] bg-[hsl(var(--brand-blue))/5] scale-[0.99]' 
+          : 'border-gray-300 hover:border-[hsl(var(--brand-blue))] hover:bg-gray-50'
         }
       `}
     >
       <input {...getInputProps()} />
       <Upload className={`
-        w-12 h-12 mx-auto mb-4
-        ${isDragActive ? 'text-primary' : 'text-gray-400'}
+        w-16 h-16 mx-auto mb-6
+        ${isDragActive ? 'text-[hsl(var(--brand-blue))]' : 'text-gray-400'}
         transition-colors duration-200
       `} />
-      <p className="text-lg font-medium text-gray-900">
+      <p className="text-xl font-medium text-gray-900 mb-2">
         {isDragActive ? 'Drop your CSV file here' : 'Drag & drop your CSV file here'}
       </p>
-      <p className="mt-2 text-sm text-gray-500">
+      <p className="text-base text-gray-600 mb-4">
         or click to select a file
       </p>
-      <p className="mt-4 text-xs text-gray-400">
-        File must be a CSV with product titles in Column A starting at Row 2
-      </p>
+      {acceptedFiles.length > 0 ? (
+        <p className="text-sm font-medium text-[hsl(var(--brand-blue))]">
+          Selected: {acceptedFiles[0].name}
+        </p>
+      ) : (
+        <p className="text-sm text-gray-500">
+          <strong>CSV file</strong> with titles in Column A (from Row 2)
+        </p>
+      )}
     </div>
   );
 };

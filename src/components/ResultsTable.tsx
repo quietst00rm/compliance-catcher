@@ -17,12 +17,12 @@ export const ResultsTable = ({ data }: ResultsTableProps) => {
     <div className="overflow-x-auto">
       <Table>
         <TableHeader className="sticky top-0 bg-white shadow-sm z-10">
-          <TableRow>
-            <TableHead className="w-[300px] text-base font-semibold">Product Title</TableHead>
-            <TableHead className="text-base font-semibold">Character Count</TableHead>
-            <TableHead className="text-base font-semibold">Special Characters</TableHead>
-            <TableHead className="text-base font-semibold">Repeated Words</TableHead>
-            <TableHead className="w-[300px] text-base font-semibold">Details</TableHead>
+          <TableRow className="border-b border-gray-200 bg-gray-50">
+            <TableHead className="w-[40%] text-base font-semibold text-gray-900">Product Title</TableHead>
+            <TableHead className="text-base font-semibold text-gray-900">Character Count</TableHead>
+            <TableHead className="text-base font-semibold text-gray-900">Special Characters</TableHead>
+            <TableHead className="text-base font-semibold text-gray-900">Repeated Words</TableHead>
+            <TableHead className="w-[25%] text-base font-semibold text-gray-900">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,10 +41,28 @@ export const ResultsTable = ({ data }: ResultsTableProps) => {
                   transition-colors
                 `}
               >
-                <TableCell className="font-medium">{item.title}</TableCell>
-                <TableCell>{item.characterCount}</TableCell>
-                <TableCell>{item.specialCharacters}</TableCell>
-                <TableCell>{item.repeatedWords}</TableCell>
+                <TableCell className="font-medium text-gray-900">{item.title}</TableCell>
+                <TableCell className="text-gray-700">{item.characterCount}</TableCell>
+                <TableCell>
+                  <span className={`
+                    px-2 py-1 rounded-full text-sm font-medium
+                    ${item.specialCharacters === 'Compliant' 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-red-100 text-red-800'}
+                  `}>
+                    {item.specialCharacters}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className={`
+                    px-2 py-1 rounded-full text-sm font-medium
+                    ${item.repeatedWords === 'Compliant' 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-red-100 text-red-800'}
+                  `}>
+                    {item.repeatedWords}
+                  </span>
+                </TableCell>
                 <TableCell className="text-sm text-gray-600">{item.details}</TableCell>
               </TableRow>
             );
