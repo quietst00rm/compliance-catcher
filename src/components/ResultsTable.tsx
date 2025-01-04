@@ -14,15 +14,15 @@ interface ResultsTableProps {
 
 export const ResultsTable = ({ data }: ResultsTableProps) => {
   return (
-    <div className="rounded-md border">
+    <div className="overflow-x-auto">
       <Table>
-        <TableHeader>
+        <TableHeader className="sticky top-0 bg-white shadow-sm z-10">
           <TableRow>
-            <TableHead className="w-[300px]">Product Title</TableHead>
-            <TableHead>Character Count</TableHead>
-            <TableHead>Special Characters</TableHead>
-            <TableHead>Repeated Words</TableHead>
-            <TableHead className="w-[300px]">Details</TableHead>
+            <TableHead className="w-[300px] text-base font-semibold">Product Title</TableHead>
+            <TableHead className="text-base font-semibold">Character Count</TableHead>
+            <TableHead className="text-base font-semibold">Special Characters</TableHead>
+            <TableHead className="text-base font-semibold">Repeated Words</TableHead>
+            <TableHead className="w-[300px] text-base font-semibold">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -35,13 +35,17 @@ export const ResultsTable = ({ data }: ResultsTableProps) => {
             return (
               <TableRow
                 key={index}
-                className={isNonCompliant ? 'bg-red-50' : undefined}
+                className={`
+                  ${isNonCompliant ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}
+                  ${index % 2 === 0 ? 'bg-opacity-50' : ''}
+                  transition-colors
+                `}
               >
                 <TableCell className="font-medium">{item.title}</TableCell>
                 <TableCell>{item.characterCount}</TableCell>
                 <TableCell>{item.specialCharacters}</TableCell>
                 <TableCell>{item.repeatedWords}</TableCell>
-                <TableCell>{item.details}</TableCell>
+                <TableCell className="text-sm text-gray-600">{item.details}</TableCell>
               </TableRow>
             );
           })}

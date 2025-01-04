@@ -48,44 +48,60 @@ const Index = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Product Title Analyzer
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Upload a CSV file to analyze product titles for compliance with character count,
-            special characters, and word repetition rules.
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b border-gray-200">
+        <div className="container mx-auto py-4 px-4">
+          <img 
+            src="/lovable-uploads/f3386a45-cffe-4512-927a-65c60adcdb43.png" 
+            alt="MajestIQ Logo" 
+            className="h-12"
+          />
         </div>
+      </header>
 
-        <div className="grid gap-8">
-          <div className="space-y-4">
-            <h2 className="text-lg font-medium">Upload File</h2>
-            <FileUpload onFileSelect={handleFileSelect} />
+      <main className="container mx-auto py-8 px-4 max-w-7xl">
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
+              Product Title Analyzer
+            </h1>
+            <p className="mt-2 text-lg text-gray-600">
+              Upload a CSV file to analyze product titles for compliance with character count,
+              special characters, and word repetition rules.
+            </p>
           </div>
 
-          {isProcessing && (
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-            </div>
-          )}
-
-          {results.length > 0 && (
+          <div className="grid gap-8">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-medium">Results</h2>
-                <Button onClick={handleExport}>
-                  <Download className="mr-2 h-4 w-4" />
-                  Export Results
-                </Button>
+              <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <h2 className="text-xl font-medium mb-4 text-gray-900">Upload File</h2>
+                <FileUpload onFileSelect={handleFileSelect} />
               </div>
-              <ResultsTable data={results} />
             </div>
-          )}
+
+            {isProcessing && (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+              </div>
+            )}
+
+            {results.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-medium text-gray-900">Results</h2>
+                  <Button onClick={handleExport} variant="outline">
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Results
+                  </Button>
+                </div>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                  <ResultsTable data={results} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
