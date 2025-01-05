@@ -87,15 +87,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-gradient-to-r from-[hsl(var(--brand-gold))] to-[hsl(var(--brand-blue))] border-b border-gray-200">
+      <header className="bg-gray-100 border-b border-gray-200">
         <div className="container mx-auto py-8 px-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center relative">
             <img 
               src="/lovable-uploads/f3386a45-cffe-4512-927a-65c60adcdb43.png" 
               alt="MajestIQ Logo" 
               className="h-14"
             />
-            <Crown className="w-6 h-6 text-white animate-pulse" />
+            <Crown className="w-6 h-6 text-[hsl(var(--brand-gold))] animate-pulse absolute -right-8" />
           </div>
         </div>
       </header>
